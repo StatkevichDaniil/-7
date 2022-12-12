@@ -1,94 +1,140 @@
-﻿Console.WriteLine("Введите количество строк массива: ");
-int rows = int.Parse(Console.ReadLine()!);
+﻿// Задача 54: Задайте двумерный массив. Напишите программу, которая упорядочит по убыванию элементы каждой строки двумерного массива.
+// Например, задан массив:
+// 1 4 7 2
+// 5 9 2 3
+// 8 4 2 4
+// В итоге получается вот такой массив:
+// 7 4 2 1
+// 9 5 3 2
+// 8 4 4 2
 
-Console.WriteLine("Введите количество столбцов массива: ");
-int columns = int.Parse(Console.ReadLine()!);
-
-double[,] array = GetArray(rows, columns, -10, 10);
+int[,] array = GetArray(4, 5);
+PrintArray(array);
+Console.WriteLine();
+SortArray(array);
 PrintArray(array);
 
-Console.WriteLine("Введите номер строки массива: ");
-int i = int.Parse(Console.ReadLine()!);
 
-Console.WriteLine("Введите номер столбца массива: ");
-int j = int.Parse(Console.ReadLine()!);
+void SortArray(int[,] array)
+{
+    for (int k = 0; k < array.GetLength(0); k++)
+    {
+        for (int i = 0; i < array.GetLength(1) - 1; i++)
+        {
+            int min = array[k, i];
+            for (int j = i + 1; j < array.GetLength(1); j++)
+            {
+                if (array[k, j] > array[k, i])
+                {
+                    int hub = array[k, i];
+                    array[k, i] = array[k, j];
+                    array[k, j] = hub;
+                }
+            }
+        }
+    }
+}
 
-PresenceElement(array,i,j);
-Console.WriteLine("====================");
-GetAvgColumn(array);
-
-
-
-// ------------------Методы-----------------------
-// Задача 47. Задайте двумерный массив размером m×n, заполненный случайными вещественными числами.
-// m = 3, n = 4.
-// 0,5 7 -2 -0,2
-// 1 -3,3 8 -9,9
-// 8 7,8 -7,1 9
-
-double[,] GetArray(int m, int n, int minValue, int maxValue){
-    double[,] result = new double[m,n];
-    for(int i = 0; i < m; i++){
-        for(int j = 0; j < n; j++){
-            result[i,j] = new Random().Next(minValue, maxValue + 1) + new Random().NextDouble();
+int[,] GetArray(int m, int n)
+{
+    int[,] result = new int[m, n];
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            result[i, j] = new Random().Next(0, 10);
         }
     }
     return result;
 }
-
-
-// Метод печати двумерного масссива
-void PrintArray(double[,] array){
-    for(int i = 0; i < array.GetLength(0); i++){
-        for(int j = 0; j < array.GetLength(1); j++){
-            Console.Write($"{array[i,j]:f2} ");
+void PrintArray(int[,] array)
+{
+    for (int i = 0; i < array.GetLength(0); i++)
+    {
+        for (int j = 0; j < array.GetLength(1); j++)
+        {
+            Console.Write($"{array[i, j]} ");
         }
         Console.WriteLine();
     }
 }
 
 
-
-
-// Задача 50. Напишите программу, которая на вход принимает позиции элемента в двумерном массиве,
-// и возвращает значение этого элемента или же указание, что такого элемента нет.
+// Задача 56: Задайте прямоугольный двумерный массив. Напишите программу, которая будет находить строку с наименьшей суммой элементов.
 // Например, задан массив:
 // 1 4 7 2
 // 5 9 2 3
 // 8 4 2 4
-// i = 5; j = 2 -> такого числа в массиве нет
-// i = 1; j = 1 -> 9
+// 5 2 6 7
+// Программа считает сумму элементов в каждой строке и выдаёт номер строки с наименьшей суммой элементов: 1 строка
 
-void PresenceElement (double [,] array ,int i,int j){
-    if (i< array.GetLength(0)&& i>0
-    && j<array.GetLength(1)&& j>0){
-        Console.WriteLine($"элемент масива в {i} строке, {j} столбце равен: {array[i-1,j-1]}");
+Console.WriteLine();
+Console.WriteLine($"{MinSumElementsntArray(array) + 1} строка содержит минимальную сумму элементов");
+
+
+int MinSumElementsntArray(int[,] array)
+{
+    int sum = 0, n = 0;
+    int[] Nsum = new int[array.GetLength(0)];
+    for (int i = 0; i < array.GetLength(0); i++)
+    {
+        for (int j = 0; j < array.GetLength(1); j++)
+        {
+            sum += array[i, j];
+        }
+        Nsum[i] = sum;
+        sum = 0;
     }
-    else Console.WriteLine("такого элемента нет");
+    sum = Nsum[0];
+    for (int k = 0; k < Nsum.Length; k++)
+    {
+        if (Nsum[k] < sum)
+        {
+            sum = Nsum[k];
+            n = k;
+        }
+    }
+    return n;
 }
 
 
 
-///////Задача 52. Задайте двумерный массив из целых чисел. Найдите среднее арифметическое элементов в каждом столбце.
-// Например, задан массив:
-// 1 4 7 2
-// 5 9 2 3
-// 8 4 2 4
-//Среднее арифметическое каждого столбца: 4,6; 5,6; 3,6; 3.
+// Задача 58: Задайте две матрицы. Напишите программу, которая будет находить произведение двух матриц.
+// Например, даны 2 матрицы:
+// 2 4 | 3 4
+// 3 2 | 3 3
+// Результирующая матрица будет:
+// 18 20
+// 15 18
 
-void GetAvgColumn(double[,] array)
+Console.WriteLine();
+int[,] array1 = GetArray(2, 2);
+PrintArray(array1);
+Console.WriteLine();
+int[,] array2 = GetArray(2, 2);
+PrintArray(array2);
+Console.WriteLine();
+array = ProductTwoMatrices(array1, array2);
+PrintArray(array);
+
+
+
+
+int[,] ProductTwoMatrices(int[,] arrayA, int[,] arrayB)
 {
-    Console.Write("[");
-    for (int j = 0; j < array.GetLength(1); j++)
+    int[,] result = new int[arrayA.GetLength(0), arrayA.GetLength(1)];
+    for (int i = 0; i < result.GetLength(0); i++)
     {
-        double sum = 0;
+        for (int j = 0; j < result.GetLength(1); j++)
         {
-            for (int i = 0; i < array.GetLength(0); i++)
+            int sum = 0;
+            for (int x = 0; x < result.GetLength(0); x++)
             {
-                sum = sum + array[i, j];
+                sum += arrayA[i, x] * arrayB[x, j];
             }
-            Console.Write($"  {(sum / array.GetLength(0)):f2}  ");
+            result[i, j] = sum;
+            sum = 0;
         }
     }
-    Console.WriteLine("]");
+    return result;
 }
